@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane fx:id="rootPane"
+           xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.bhojhon.controller.SplashController"
+           styleClass="ss-root"
+           stylesheets="@styles.css">
+
+    <!-- New Dynamic Layout mimicking the requested design -->
+    <VBox fx:id="mainCard" alignment="CENTER" spacing="55">
+        <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
+
+        <!-- Top Logo Lockup -->
+        <HBox alignment="CENTER" spacing="10">
+            <!-- Train Icon Container (simulates the 2-circle pip logo) -->
+            <StackPane style="-fx-background-color: rgba(255,255,255,0.85); -fx-background-radius: 18;" prefWidth="54" prefHeight="32" maxWidth="54" maxHeight="32">
+                <Label text="🚂" style="-fx-font-size: 16px;"/>
+            </StackPane>
+            
+            <!-- Brand Tagline stacked -->
+            <VBox alignment="CENTER_LEFT" spacing="-1">
+                <Label text="PREMIUM" style="-fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-font-size: 17px; -fx-letter-spacing: 0.5px;"/>
+                <Label text="CATERING" style="-fx-text-fill: #a2cbfc; -fx-font-size: 12px;"/>
+            </VBox>
+        </HBox>
+
+        <!-- Massive Centered Title -->
+        <VBox alignment="CENTER" spacing="-25">
+            <Label text="Bhojon" style="-fx-font-size: 80px; -fx-font-weight: 900; -fx-text-fill: #e2e8f0; -fx-font-family: 'Segoe UI', Arial, sans-serif; -fx-letter-spacing: -2px;"/>
+            <Label text="OnRails" style="-fx-font-size: 80px; -fx-font-weight: 900; -fx-text-fill: #e2e8f0; -fx-font-family: 'Segoe UI', Arial, sans-serif; -fx-letter-spacing: -2px;"/>
+        </VBox>
+
+        <!-- Bottom Action Pill / Loading Area -->
+        <VBox alignment="CENTER" spacing="10">
+            <HBox alignment="CENTER" spacing="8" style="-fx-background-color: rgba(255, 255, 255, 0.12); -fx-background-radius: 30; -fx-padding: 8 20; -fx-border-color: rgba(255, 255, 255, 0.15); -fx-border-radius: 30; -fx-border-width: 1;">
+                <!-- Left subtle adornment icon like the button in screenshot -->
+                <Label text="⚙" style="-fx-text-fill: #a2cbfc; -fx-font-size: 12px;"/>
+                
+                <Label text="LOADING..." style="-fx-text-fill: #e2e8f0; -fx-font-size: 11px; -fx-font-weight: bold; -fx-letter-spacing: 2.5px;"/>
+                
+                <!-- Right subtle adornment arrow -->
+                <Label text="→" style="-fx-text-fill: #a2cbfc; -fx-font-size: 12px;"/>
+            </HBox>
+            
+            <!-- Hidden or subtly styled progress bar -->
+            <StackPane maxWidth="160">
+                <ProgressBar fx:id="progressBar" progress="0.0" prefWidth="160" prefHeight="3" styleClass="ss-progress-bar"/>
+            </StackPane>
+        </VBox>
+
+    </VBox>
+
+</StackPane>

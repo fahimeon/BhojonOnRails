@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.bhojhon.controller.MainMenuController"
+           styleClass="menu-root"
+           stylesheets="@styles.css">
+
+    <!-- Decorative Elements (in background) -->
+    <AnchorPane>
+        <Region AnchorPane.rightAnchor="0" AnchorPane.topAnchor="250" prefWidth="160" prefHeight="48" style="-fx-background-color: #1d4ed8; -fx-background-radius: 24 0 0 24;" />
+        <Region AnchorPane.leftAnchor="0" AnchorPane.topAnchor="350" prefWidth="128" prefHeight="48" style="-fx-background-color: #1d4ed8; -fx-background-radius: 0 24 24 0;" />
+        <Region AnchorPane.leftAnchor="300" AnchorPane.bottomAnchor="0" prefWidth="64" prefHeight="192" style="-fx-background-color: #1d4ed8; -fx-background-radius: 5 5 0 0;" />
+        <Region AnchorPane.rightAnchor="300" AnchorPane.bottomAnchor="0" prefWidth="64" prefHeight="256" style="-fx-background-color: #1d4ed8; -fx-background-radius: 5 5 0 0;" />
+    </AnchorPane>
+
+    <!-- Main Content -->
+    <VBox alignment="CENTER" spacing="20">
+        <!-- Header -->
+        <VBox alignment="CENTER" spacing="0">
+            <VBox.margin><Insets bottom="20"/></VBox.margin>
+            <Label text="Choose Your Role" styleClass="menu-main-title"/>
+            <Label text="Select One Option to Continue" styleClass="menu-sub-title"/>
+        </VBox>
+
+        <!-- Main Card Container -->
+        <HBox styleClass="menu-card-container" alignment="CENTER" spacing="40" maxWidth="1000">
+            <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
+            
+            <!-- Restaurant Owner Card -->
+            <Button styleClass="menu-option-card" onAction="#handleRestaurantClick">
+                <graphic>
+                    <VBox alignment="TOP_CENTER" spacing="15">
+                        <ImageView fitHeight="160" fitWidth="160" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@restaurantowner icon.png"/>
+                            </image>
+                        </ImageView>
+                        <Label text="Restaurant&#10;Owner" textAlignment="CENTER" styleClass="menu-card-title"/>
+                        <VBox VBox.vgrow="ALWAYS" />
+                        <Label text="Get Extra Orders from&#10;our App!" textAlignment="CENTER" styleClass="menu-card-desc"/>
+                    </VBox>
+                </graphic>
+            </Button>
+
+            <!-- Passenger Card -->
+            <Button styleClass="menu-option-card" onAction="#handleUserClick">
+                <graphic>
+                    <VBox alignment="TOP_CENTER" spacing="15">
+                        <ImageView fitHeight="160" fitWidth="160" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@passenger icon.png"/>
+                            </image>
+                        </ImageView>
+                        <Label text="Passenger" textAlignment="CENTER" styleClass="menu-card-title"/>
+                        <VBox VBox.vgrow="ALWAYS" />
+                        <Label text="Order Your Favourite Food&#10;from nearby restaurants" textAlignment="CENTER" styleClass="menu-card-desc"/>
+                    </VBox>
+                </graphic>
+            </Button>
+
+            <!-- Admin Card -->
+            <Button styleClass="menu-option-card" onAction="#handleAdminClick">
+                <graphic>
+                    <VBox alignment="TOP_CENTER" spacing="15">
+                        <ImageView fitHeight="160" fitWidth="160" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@admin icon.png"/>
+                            </image>
+                        </ImageView>
+                        <Label text="Admin" textAlignment="CENTER" styleClass="menu-card-title"/>
+                        <VBox VBox.vgrow="ALWAYS" />
+                        <Label text="Get to see dashboards&#10;and Insights" textAlignment="CENTER" styleClass="menu-card-desc"/>
+                    </VBox>
+                </graphic>
+            </Button>
+        </HBox>
+    </VBox>
+</StackPane>

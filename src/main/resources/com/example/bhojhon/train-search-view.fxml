@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.bhojhon.controller.TrainSearchController"
+           fx:id="rootPane"
+           styleClass="ts-root">
+
+    <ImageView opacity="0.15" fitWidth="${rootPane.width}" fitHeight="${rootPane.height}" preserveRatio="false">
+        <image>
+            <Image url="@train search bg.png"/>
+        </image>
+    </ImageView>
+
+    <VBox alignment="CENTER" spacing="40" maxWidth="680" maxHeight="650">
+        
+        <!-- Header Section -->
+        <VBox alignment="CENTER" spacing="8">
+            <Label text="Train Search" styleClass="ts-page-title" style="-fx-font-size: 48px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.7), 15, 0, 0, 5); -fx-font-weight: 900;"/>
+            <Label text="Find your train and pre-order meals easily" styleClass="ts-page-subtitle" style="-fx-font-size: 18px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 10, 0, 0, 3);"/>
+        </VBox>
+
+        <!-- Search Form & Result Card wrapped in a Glass Pane -->
+        <StackPane maxWidth="680" style="-fx-background-color: white; -fx-background-radius: 36px; -fx-padding: 15px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 30, 0, 0, 15);">
+            <VBox spacing="0" styleClass="ts-card" minHeight="380">
+            
+            <!-- Search Form Area -->
+            <VBox spacing="20" styleClass="ts-search-area">
+                <padding>
+                    <Insets top="30" right="30" bottom="25" left="30"/>
+                </padding>
+                
+                <VBox spacing="8">
+                    <Label text="Train Number" styleClass="ts-field-label"/>
+                    <HBox spacing="12">
+                        <TextField fx:id="trainNumberField"
+                                   promptText="Example: 101, 102, 201"
+                                   styleClass="ts-text-field"
+                                   HBox.hgrow="ALWAYS"/>
+                        <Button text="Search"
+                                onAction="#handleSearch"
+                                styleClass="ts-btn-search"/>
+                    </HBox>
+                    <Label text="Available: 101 (Suborno), 102 (Turna), 201 (Silk City), 202 (Padma)"
+                           styleClass="ts-hint-text"/>
+                </VBox>
+            </VBox>
+            
+            <!-- Result Section -->
+            <VBox spacing="10" styleClass="ts-result-container">
+                <padding>
+                    <Insets top="20" right="30" bottom="30" left="30"/>
+                </padding>
+                <Label text="Train Information" styleClass="ts-section-header"/>
+                
+                <Label fx:id="trainNameLabel" styleClass="ts-train-name"/>
+                <Label fx:id="routeLabel" styleClass="ts-train-route"/>
+                <Label fx:id="stationCountLabel" styleClass="ts-train-route"/>
+            </VBox>
+        </VBox>
+
+        </StackPane>
+
+        <!-- Actions -->
+        <HBox spacing="15" alignment="CENTER_RIGHT">
+            <Button text="← Back"
+                    onAction="#handleBack"
+                    styleClass="ts-btn-secondary" prefWidth="130" prefHeight="50" style="-fx-font-size: 16px;"/>
+            <Button text="View Stations"
+                    onAction="#handleViewStations"
+                    styleClass="ts-btn-primary" prefHeight="50" prefWidth="180" style="-fx-font-size: 16px;"/>
+        </HBox>
+        
+    </VBox>
+</StackPane>

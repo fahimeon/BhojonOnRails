@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.bhojhon.controller.WelcomeController">
+
+    <!-- ✅ Full Screen Background Image -->
+    <ImageView preserveRatio="false">
+        <image>
+            <!-- 🌐 Your network image -->
+            <Image url="https://cdna.artstation.com/p/assets/images/images/043/291/076/large/rafid-rahim-train-over-haor-2.jpg?1636859469"/>
+        </image>
+    </ImageView>
+
+    <!-- ✅ Foreground Content -->
+    <VBox alignment="CENTER"
+          spacing="24"
+          styleClass="welcome-container">
+
+        <padding>
+            <Insets top="40" right="40" bottom="40" left="40"/>
+        </padding>
+
+        <Label text="Train Food Pre-Order" styleClass="app-title">
+            <font>
+                <Font name="System Bold" size="32"/>
+            </font>
+        </Label>
+
+        <Label text="Fresh meals delivered to your train seat"
+               styleClass="subtitle">
+            <font>
+                <Font size="16"/>
+            </font>
+        </Label>
+
+        <Button text="Start Ordering"
+                onAction="#handleStartButton"
+                prefWidth="220"
+                prefHeight="48"
+                styleClass="primary-button">
+            <font>
+                <Font name="System Bold" size="15"/>
+            </font>
+        </Button>
+
+        <Label text="Powered by Bangladesh Railway partners"
+               styleClass="info-text">
+            <font>
+                <Font size="13"/>
+            </font>
+        </Label>
+
+    </VBox>
+
+</StackPane>

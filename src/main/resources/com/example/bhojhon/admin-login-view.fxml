@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.bhojhon.controller.AdminLoginController"
+           styleClass="login-root"
+           stylesheets="@styles.css">
+
+    <!-- Decorative background elements similar to main menu -->
+    <AnchorPane>
+        <Region AnchorPane.rightAnchor="0" AnchorPane.topAnchor="150" prefWidth="120" prefHeight="48" style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 24 0 0 24;" />
+        <Region AnchorPane.leftAnchor="0" AnchorPane.topAnchor="450" prefWidth="180" prefHeight="64" style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 0 32 32 0;" />
+        <Region AnchorPane.leftAnchor="200" AnchorPane.bottomAnchor="0" prefWidth="80" prefHeight="140" style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 12 12 0 0;" />
+    </AnchorPane>
+
+    <!-- Main Content -->
+    <VBox alignment="CENTER" spacing="30">
+        <!-- Logo / Header -->
+        <VBox alignment="CENTER" spacing="-5">
+            <Label text="Bhojon OnRails" styleClass="menu-main-title" style="-fx-font-size: 42px;"/>
+            <Label text="ADMIN PORTAL" styleClass="menu-sub-title" style="-fx-font-size: 14px; -fx-letter-spacing: 2px;"/>
+        </VBox>
+
+        <!-- Login Card -->
+        <VBox styleClass="login-card-container" maxWidth="450" alignment="TOP_CENTER">
+            <Label text="Welcome Back" styleClass="login-title"/>
+            <Label text="Enter your credentials to manage the system" styleClass="login-subtitle">
+                <VBox.margin><Insets top="5" bottom="30"/></VBox.margin>
+            </Label>
+
+            <VBox spacing="20" alignment="CENTER_LEFT">
+                <VBox spacing="8">
+                    <Label text="Email Address" styleClass="login-field-label"/>
+                    <TextField fx:id="emailField" promptText="admin@bhojon.com" styleClass="login-field"/>
+                </VBox>
+                
+                <VBox spacing="8">
+                    <Label text="Password" styleClass="login-field-label"/>
+                    <PasswordField fx:id="passwordField" promptText="Enter your secure password" styleClass="login-field"/>
+                </VBox>
+
+                <Label fx:id="errorLabel" styleClass="login-error-label" visible="false"/>
+
+                <Button text="Login to Dashboard" onAction="#handleLogin" maxWidth="Infinity" styleClass="login-btn-primary">
+                    <VBox.margin><Insets top="10"/></VBox.margin>
+                </Button>
+
+                <HBox alignment="CENTER">
+                    <VBox.margin><Insets top="15"/></VBox.margin>
+                    <Button text="← Back to Home" onAction="#handleBack" styleClass="login-btn-secondary"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </VBox>
+</StackPane>
