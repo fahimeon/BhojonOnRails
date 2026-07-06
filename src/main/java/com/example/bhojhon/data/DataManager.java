@@ -33,7 +33,7 @@ public class DataManager {
 
     private void initializeStations() {
         try {
-            DatabaseHelper dbHelper = new DatabaseHelper();
+            DatabaseHelper dbHelper = DatabaseHelper.getInstance();
             stations = dbHelper.getStations();
         } catch (Exception e) {
             System.err.println("Error loading stations in DataManager: " + e.getMessage());
@@ -145,7 +145,7 @@ public class DataManager {
 
         // Kacchi Bhai menu
         foodItems.add(new FoodItem(9, "Special Kacchi", 3, 300, "Main Course", "Premium mutton biriyani",
-                "hhttps://i.pinimg.com/736x/23/22/11/23221180c3b9a702f20c1f42051ad64d.jpg"));
+                "https://i.pinimg.com/736x/23/22/11/23221180c3b9a702f20c1f42051ad64d.jpg"));
         foodItems.add(new FoodItem(10, "Chicken Biriyani", 3, 180, "Main Course", "Dhaka style chicken biriyani",
                 "https://i.pinimg.com/736x/23/22/11/23221180c3b9a702f20c1f42051ad64d.jpg"));
         foodItems.add(new FoodItem(11, "Firni", 3, 80, "Dessert", "Traditional rice pudding",
@@ -182,7 +182,7 @@ public class DataManager {
 
         // Dynamic restaurants from database
         try {
-            DatabaseHelper dbHelper = new DatabaseHelper();
+            DatabaseHelper dbHelper = DatabaseHelper.getInstance();
             List<Restaurant> dynamicRestaurants = dbHelper.getRegisteredRestaurantsByStationId(stationId);
             stationRestaurants.addAll(dynamicRestaurants);
         } catch (Exception e) {
@@ -204,7 +204,7 @@ public class DataManager {
 
         // Dynamic food items from database
         try {
-            DatabaseHelper dbHelper = new DatabaseHelper();
+            DatabaseHelper dbHelper = DatabaseHelper.getInstance();
             List<FoodItem> dynamicItems = dbHelper.getFoodItemsByRestaurantId(restaurantId);
             restaurantFoodItems.addAll(dynamicItems);
         } catch (Exception e) {

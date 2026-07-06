@@ -1,6 +1,11 @@
 package com.example.bhojhon.data;
 
 import com.example.bhojhon.model.TicketInfo;
+import com.example.bhojhon.util.AppConfig;
+import com.example.bhojhon.util.PasswordUtil;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -9,12 +14,59 @@ import java.sql.Statement;
 
 /**
  * Helper class for SQLite database operations.
+ *
+ * <p>The database lives at a fixed, absolute location under the user's
+ * application-data directory so the app works regardless of the working
+ * directory it is launched from. Schema initialization runs exactly once per
+ * JVM (guarded by {@link #schemaReady}); prefer {@link #getInstance()} over
+ * constructing new instances.
  */
 public class DatabaseHelper {
-    private static final String DB_URL = "jdbc:sqlite:railkhabar.db";
+
+    private static final String DB_URL = "jdbc:sqlite:" + resolveDbPath();
+    private static volatile boolean schemaReady = false;
+    private static DatabaseHelper instance;
 
     public DatabaseHelper() {
-        initializeDatabase();
+        ensureSchema();
+    }
+
+    /** Shared instance — preferred entry point to avoid redundant construction. */
+    public static synchronized DatabaseHelper getInstance() {
+        if (instance == null) {
+            instance = new DatabaseHelper();
+        }
+        return instance;
+    }
+
+    /** Resolves an absolute DB path under %APPDATA%/BhojonOnRails (or ~/.bhojhon). */
+    private static String resolveDbPath() {
+        String appData = System.getenv("APPDATA");
+        Path base = (appData != null && !appData.isBlank())
+                ? Path.of(appData, "BhojonOnRails")
+                : Path.of(System.getProperty("user.home"), ".bhojhon");
+        try {
+            Files.createDirectories(base);
+            return base.resolve("railkhabar.db").toString();
+        } catch (IOException e) {
+            System.err.println("Could not create app-data dir, falling back to working dir: "
+                    + e.getMessage());
+            return "railkhabar.db";
+        }
+    }
+
+    /** Runs schema initialization at most once per JVM. */
+    private void ensureSchema() {
+        if (schemaReady) {
+            return;
+        }
+        synchronized (DatabaseHelper.class) {
+            if (schemaReady) {
+                return;
+            }
+            initializeDatabase();
+            schemaReady = true;
+        }
     }
 
     private void initializeDatabase() {
@@ -62,6 +114,13 @@ public class DatabaseHelper {
                 "FOREIGN KEY (restaurant_id) REFERENCES restaurant_owners(id)" +
                 ");";
 
+        String createAdminsTableSQL = "CREATE TABLE IF NOT EXISTS admins (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "email TEXT UNIQUE NOT NULL," +
+                "password TEXT NOT NULL," +
+                "created_at TEXT NOT NULL" +
+                ");";
+
         try (Connection conn = DriverManager.getConnection(DB_URL);
                 Statement stmt = conn.createStatement()) {
             stmt.execute(createOrdersTableSQL);
@@ -76,9 +135,13 @@ public class DatabaseHelper {
             }
 
             stmt.execute(createFoodItemsTableSQL);
+            stmt.execute(createAdminsTableSQL);
 
             // Populate stations if empty
             populateStations(conn);
+
+            // Seed the default administrator if none exists
+            seedDefaultAdmin(conn);
 
             System.out.println("Database initialized and tables checked/created.");
         } catch (SQLException e) {
@@ -335,7 +398,7 @@ public class DatabaseHelper {
 
             pstmt.setString(1, restaurantName);
             pstmt.setString(2, email.toLowerCase());
-            pstmt.setString(3, hashPassword(password));
+            pstmt.setString(3, PasswordUtil.hash(password));
             pstmt.setInt(4, stationId);
             pstmt.setString(5, java.time.LocalDateTime.now().toString());
 
@@ -365,7 +428,7 @@ public class DatabaseHelper {
 
             if (rs.next()) {
                 String storedPassword = rs.getString("password");
-                if (storedPassword.equals(hashPassword(password))) {
+                if (PasswordUtil.verify(password, storedPassword)) {
                     return new com.example.bhojhon.model.RestaurantOwner(
                             rs.getInt("id"),
                             rs.getString("restaurant_name"),
@@ -539,11 +602,51 @@ public class DatabaseHelper {
         }
     }
 
+    // ========== ADMIN METHODS ==========
+
     /**
-     * Simple password hashing (for demo purposes)
+     * Authenticate an administrator against the {@code admins} table.
+     * The default admin is seeded on first run (see {@link #seedDefaultAdmin}).
+     *
+     * @return true when the email/password pair matches a stored admin.
      */
-    private String hashPassword(String password) {
-        // Simple hash for demo - in production use BCrypt or similar
-        return Integer.toString(password.hashCode());
+    public boolean authenticateAdmin(String email, String password) {
+        String query = "SELECT password FROM admins WHERE email = ?";
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+                PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, email == null ? "" : email.toLowerCase().trim());
+            try (java.sql.ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return PasswordUtil.verify(password, rs.getString("password"));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error authenticating admin: " + e.getMessage());
+        }
+        return false;
+    }
+
+    /**
+     * Seed a single default administrator on first run. The email and password
+     * are configurable via {@code admin.email} / {@code admin.password}
+     * (see config.properties), defaulting to admin@gmail.com / admin123.
+     */
+    private void seedDefaultAdmin(Connection conn) throws SQLException {
+        try (Statement stmt = conn.createStatement();
+                java.sql.ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM admins")) {
+            if (rs.next() && rs.getInt(1) > 0) {
+                return;
+            }
+        }
+        String defaultEmail = AppConfig.get("admin.email", "admin@gmail.com").toLowerCase().trim();
+        String defaultPassword = AppConfig.get("admin.password", "admin123");
+        String insertSQL = "INSERT INTO admins(email, password, created_at) VALUES(?, ?, ?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
+            pstmt.setString(1, defaultEmail);
+            pstmt.setString(2, PasswordUtil.hash(defaultPassword));
+            pstmt.setString(3, java.time.LocalDateTime.now().toString());
+            pstmt.executeUpdate();
+            System.out.println("Default admin seeded: " + defaultEmail);
+        }
     }
 }

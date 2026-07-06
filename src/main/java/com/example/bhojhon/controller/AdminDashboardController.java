@@ -136,7 +136,7 @@ public class AdminDashboardController extends BaseController {
 
     /** Refresh everything: stat cards + both tables */
     private void refreshAll() {
-        DatabaseHelper db = new DatabaseHelper();
+        DatabaseHelper db = DatabaseHelper.getInstance();
 
         // Stat cards
         if (statRestaurantsValue != null)
@@ -155,7 +155,7 @@ public class AdminDashboardController extends BaseController {
 
     @FXML
     private void loadRestaurants() {
-        loadRestaurants(new DatabaseHelper());
+        loadRestaurants(DatabaseHelper.getInstance());
     }
 
     private void loadRestaurants(DatabaseHelper db) {
@@ -188,7 +188,7 @@ public class AdminDashboardController extends BaseController {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == btnYes) {
-            DatabaseHelper db = new DatabaseHelper();
+            DatabaseHelper db = DatabaseHelper.getInstance();
             boolean success = db.approveRestaurantOwner(owner.getId());
             if (success) {
                 owner.setApproved(true);

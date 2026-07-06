@@ -133,14 +133,16 @@ public class OrderConfirmationController extends BaseController {
         // Start order tracking
         startTracking();
 
-        new Thread(() -> {
-            try {
-                com.example.bhojhon.service.EmailService emailService = new com.example.bhojhon.service.EmailService();
-                emailService.sendOrderConfirmation(userEmail, currentOrderId, currentOrderDetails);
-            } catch (Exception e) {
-                System.err.println("Background email sending error: " + e.getMessage());
-            }
-        }).start();
+        // Send the confirmation email off the FX thread.
+        com.example.bhojhon.util.AsyncTasks.run(
+                () -> {
+                    new com.example.bhojhon.service.EmailService()
+                            .sendOrderConfirmation(userEmail, currentOrderId, currentOrderDetails);
+                    return null;
+                },
+                ok -> {
+                },
+                error -> System.err.println("Background email sending error: " + error.getMessage()));
     }
 
     private void startTracking() {
@@ -183,7 +185,7 @@ public class OrderConfirmationController extends BaseController {
     }
 
     private void saveOrderToDatabase(String orderId, Order order, String orderDetails) {
-        com.example.bhojhon.data.DatabaseHelper db = new com.example.bhojhon.data.DatabaseHelper();
+        com.example.bhojhon.data.DatabaseHelper db = com.example.bhojhon.data.DatabaseHelper.getInstance();
         com.example.bhojhon.data.CartManager cart = com.example.bhojhon.data.CartManager.getInstance();
 
         // Format order items for storage

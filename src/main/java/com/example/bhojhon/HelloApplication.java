@@ -32,6 +32,12 @@ public class HelloApplication extends Application {
         stage.setMaximized(true);
     }
 
+    @Override
+    public void stop() {
+        // Release the shared background thread pool on shutdown.
+        com.example.bhojhon.util.AsyncTasks.shutdown();
+    }
+
     public static void main(String[] args) {
         launch();
     }

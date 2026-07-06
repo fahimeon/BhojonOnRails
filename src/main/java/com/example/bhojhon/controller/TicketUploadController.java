@@ -60,7 +60,7 @@ public class TicketUploadController extends BaseController {
     private final com.example.bhojhon.service.OCRSpaceService ocrService;
 
     public TicketUploadController() {
-        this.dbHelper = new DatabaseHelper();
+        this.dbHelper = DatabaseHelper.getInstance();
         this.ocrService = new com.example.bhojhon.service.OCRSpaceService();
     }
 
@@ -115,37 +115,28 @@ public class TicketUploadController extends BaseController {
         manualEntryBox.setVisible(false);
         manualEntryBox.setManaged(false);
 
-        // Run OCR in background thread
-        new Thread(() -> {
-            try {
-                String extractedText = performOCR(selectedImageFile);
-
-                Platform.runLater(() -> {
-                    // statusLabel.setText("Extracting details...");
+        // Run OCR off the FX thread; callbacks fire back on the FX thread.
+        com.example.bhojhon.util.AsyncTasks.run(
+                () -> performOCR(selectedImageFile),
+                extractedText -> {
                     debugArea.setVisible(true);
                     debugArea.setText(extractedText); // Show raw text for debugging
 
                     TicketInfo ticketInfo = extractTicketInfo(extractedText);
-
-                    // Populate UI
                     populateFields(ticketInfo);
 
                     statusLabel.setText("Scan Complete. Please verify details below.");
                     statusBox.setVisible(false);
 
-                    // Show Form
                     manualEntryBox.setVisible(true);
                     manualEntryBox.setManaged(true);
-                });
-
-            } catch (Exception e) {
-                Platform.runLater(() -> showError("Error: " + e.getMessage()));
-            } finally {
-                Platform.runLater(() -> {
+                    processButton.setDisable(false);
+                },
+                error -> {
+                    showError("Error: " + error.getMessage());
+                    statusBox.setVisible(false);
                     processButton.setDisable(false);
                 });
-            }
-        }).start();
     }
 
     @FXML

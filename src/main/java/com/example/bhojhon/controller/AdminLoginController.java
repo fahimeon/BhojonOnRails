@@ -1,5 +1,6 @@
 package com.example.bhojhon.controller;
 
+import com.example.bhojhon.data.DatabaseHelper;
 import com.example.bhojhon.util.BaseController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -16,6 +17,8 @@ public class AdminLoginController extends BaseController {
 
     @FXML
     private Label errorLabel;
+
+    private final DatabaseHelper dbHelper = DatabaseHelper.getInstance();
 
     @Override
     public void initialize() {
@@ -40,7 +43,7 @@ public class AdminLoginController extends BaseController {
                 return;
             }
 
-            if (email.equals("admin@gmail.com") && pass.equals("admin@gmail.com")) {
+            if (dbHelper.authenticateAdmin(email, pass)) {
                 navigateTo("/com/example/bhojhon/admin-dashboard-view.fxml", "Admin Dashboard");
             } else {
                 errorLabel.setText("Invalid credentials.");

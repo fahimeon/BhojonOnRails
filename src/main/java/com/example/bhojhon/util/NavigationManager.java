@@ -79,6 +79,9 @@ public class NavigationManager {
             primaryStage.setTitle(title);
             primaryStage.show();
 
+            // Subtle fade + rise so screen changes feel smooth, not jarring.
+            playEnterAnimation(root);
+
             // Restore maximized state if it was somehow lost (safeguard)
             if (isMaximized && !primaryStage.isMaximized()) {
                 primaryStage.setMaximized(true);
@@ -91,6 +94,22 @@ public class NavigationManager {
             e.printStackTrace();
             System.err.println("Error loading FXML: " + fxmlPath);
         }
+    }
+
+    /** Plays a short fade-in + upward slide on the newly shown screen root. */
+    private void playEnterAnimation(Parent root) {
+        javafx.animation.FadeTransition fade =
+                new javafx.animation.FadeTransition(javafx.util.Duration.millis(220), root);
+        fade.setFromValue(0.0);
+        fade.setToValue(1.0);
+
+        javafx.animation.TranslateTransition rise =
+                new javafx.animation.TranslateTransition(javafx.util.Duration.millis(220), root);
+        rise.setFromY(14);
+        rise.setToY(0);
+        rise.setInterpolator(javafx.animation.Interpolator.EASE_OUT);
+
+        new javafx.animation.ParallelTransition(fade, rise).play();
     }
 
     public void navigateTo(String fxmlPath, String title, double width, double height) {

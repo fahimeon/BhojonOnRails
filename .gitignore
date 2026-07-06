@@ -3,6 +3,16 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### Secrets & local config (NEVER commit) ###
+config.properties
+
+### Runtime data / generated artifacts ###
+railkhabar.db
+railkhabar.db-journal
+uploads/
+error_log.txt
+*.log
+
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml

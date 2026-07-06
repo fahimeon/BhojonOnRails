@@ -2,7 +2,6 @@ module com.example.bhojhon {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
-    requires tess4j;
     requires java.desktop;
     requires java.net.http;
     requires com.google.gson;

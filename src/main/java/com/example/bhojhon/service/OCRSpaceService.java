@@ -1,5 +1,6 @@
 package com.example.bhojhon.service;
 
+import com.example.bhojhon.util.AppConfig;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -15,7 +16,9 @@ import java.time.Duration;
 
 public class OCRSpaceService {
 
-    private static final String API_KEY = "K85738659188957";
+    // Loaded from config (see config.properties.example); "helloworld" is OCR.space's
+    // public demo key — works for light testing, heavily rate-limited.
+    private static final String API_KEY = AppConfig.get("ocr.space.apikey", "helloworld");
     private static final String API_URL = "https://api.ocr.space/parse/image";
 
     private final HttpClient httpClient;

@@ -41,7 +41,7 @@ public class RestaurantAuthController extends BaseController {
 
     @Override
     public void initialize() {
-        dbHelper = new DatabaseHelper();
+        dbHelper = DatabaseHelper.getInstance();
         loadStations();
     }
 

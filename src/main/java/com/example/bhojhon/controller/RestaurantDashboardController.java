@@ -58,7 +58,7 @@ public class RestaurantDashboardController extends BaseController {
 
     @Override
     public void initialize() {
-        dbHelper = new DatabaseHelper();
+        dbHelper = DatabaseHelper.getInstance();
         currentOwner = RestaurantSession.getInstance().getCurrentOwner();
 
         if (currentOwner != null) {

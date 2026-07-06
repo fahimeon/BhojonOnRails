@@ -1,0 +1,18 @@
+# Copy this file to `config.properties` (which is gitignored) and fill in real values.
+# Values can also be supplied via environment variables (e.g. MAIL_SMTP_USER)
+# or JVM system properties (e.g. -Dmail.smtp.user=...).
+
+# Gmail SMTP — create an App Password at https://myaccount.google.com/apppasswords
+mail.smtp.host=smtp.gmail.com
+mail.smtp.port=587
+mail.smtp.user=your-address@gmail.com
+mail.smtp.password=your-16-char-app-password
+
+# OCR.space API key — get a free key at https://ocr.space/ocrapi
+# The public demo key "helloworld" works for light testing but is heavily rate-limited.
+ocr.space.apikey=helloworld
+
+# Default administrator seeded on first run (password is stored PBKDF2-hashed).
+# Change these before first launch; after seeding, edit the DB to change them.
+admin.email=admin@gmail.com
+admin.password=admin123

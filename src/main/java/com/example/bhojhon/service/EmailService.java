@@ -1,5 +1,6 @@
 package com.example.bhojhon.service;
 
+import com.example.bhojhon.util.AppConfig;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -7,16 +8,19 @@ import java.util.Properties;
 
 /**
  * Service to handle email operations.
+ *
+ * <p>Credentials are loaded from configuration (see {@link AppConfig} and
+ * {@code config.properties.example}) — never hardcoded.
  */
 public class EmailService {
 
-    // Gmail SMTP Configuration
-    private static final String SMTP_HOST = "smtp.gmail.com";
-    private static final String SMTP_PORT = "587";
+    // Gmail SMTP Configuration (loaded from config; sensible defaults for host/port)
+    private static final String SMTP_HOST = AppConfig.get("mail.smtp.host", "smtp.gmail.com");
+    private static final String SMTP_PORT = AppConfig.get("mail.smtp.port", "587");
 
-    // REPLACE THESE WITH YOUR ACTUAL GMAIL AND APP PASSWORD
-    private static final String SMTP_AUTH_USER = "j84531918@gmail.com";
-    private static final String SMTP_AUTH_PWD = "mfovfdzicaskccdw";
+    // Credentials come from config.properties / env vars — see config.properties.example
+    private static final String SMTP_AUTH_USER = AppConfig.get("mail.smtp.user");
+    private static final String SMTP_AUTH_PWD = AppConfig.get("mail.smtp.password");
 
     /**
      * Sends an order confirmation email.
@@ -28,6 +32,13 @@ public class EmailService {
     public void sendOrderConfirmation(String toEmail, String orderId, String orderDetails) {
         if (toEmail == null || toEmail.isEmpty()) {
             System.err.println("Skipping email: No recipient email provided.");
+            return;
+        }
+
+        if (SMTP_AUTH_USER == null || SMTP_AUTH_USER.isBlank()
+                || SMTP_AUTH_PWD == null || SMTP_AUTH_PWD.isBlank()) {
+            System.err.println("Skipping email: SMTP credentials not configured "
+                    + "(set mail.smtp.user / mail.smtp.password in config.properties).");
             return;
         }
 
